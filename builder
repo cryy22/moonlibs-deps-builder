@@ -5,7 +5,7 @@ startdir=`pwd`
 
 cd `dirname "${file}"`
 rootdir=`pwd`
-cd startdir
+cd $startdir
 
 outputdir="${rootdir}/output/"
 
@@ -54,7 +54,7 @@ function build_refreshc() {
     dotnet build refreshc.csproj
 
     cd $startdir
-    mv "${rootdir}/Refresh/shadercompiler/bin/Debug/net8.0/refreshc" "${outputdir}"
+    mv ${rootdir}/Refresh/shadercompiler/bin/Debug/net8.0/* "${outputdir}"
 
     cd "${rootdir}/Refresh/shadercompiler/"
     rm -rf bin obj
@@ -82,7 +82,7 @@ function build_qoaconv() {
     echo "building qoaconv..."
 
     cd "${rootdir}/qoa"
-    gcc qoaconv.c -std=gnu99 -lm -O3 -o qoaconv
+    gcc qoaconv.c -std=gnu99 -DQOACONV_HAS_DRFLAC=true -I"${rootdir}/dr_libs" -lm -O3 -o qoaconv
 
     cd $startdir
     mv "${rootdir}/qoa/qoaconv" "${outputdir}"
@@ -137,6 +137,22 @@ function build_librefresh() {
     rm -rf "${rootdir}/Refresh/build"
 }
 
+function build_libfaudio() {
+    echo "building libfaudio..."
+
+    cd "${rootdir}/FAudio"
+    rm -rf build
+    mkdir build
+    cd build
+
+    CMAKE_OSX_ARCHITECTURES="arm64" cmake .. -DSDL2_INCLUDE_DIRS="${rootdir}/SDL/include/" -DSDL2_LIBRARIES="${rootdir}/output/libsdl2-2.0.0.dylib"
+    make
+
+    cd $startdir
+    cp -L "${rootdir}/FAudio/build/libFAudio.0.dylib" "${outputdir}"
+    rm -rf "${rootdir}/FAudio/build"
+}
+
 case "${sourcedir}" in
     "cimgui")
         build_cimgui
@@ -162,6 +178,9 @@ case "${sourcedir}" in
     "librefresh")
         build_librefresh
         ;;
+    "libfaudio")
+        build_libfaudio
+        ;;
     "all")
         build_cimgui
         build_bc7enc
@@ -171,6 +190,7 @@ case "${sourcedir}" in
         build_cramcli
         build_libsdl
         build_librefresh
+        build_libfaudio
         ;;
     *)
         echo "unknown sourcedir ${sourcedir}"

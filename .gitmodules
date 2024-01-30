@@ -22,3 +22,9 @@
 [submodule "SDL"]
 	path = SDL
 	url = git@github.com:libsdl-org/SDL
+[submodule "FAudio"]
+	path = FAudio
+	url = https://github.com/FNA-XNA/FAudio
+[submodule "dr_libs"]
+	path = dr_libs
+	url = https://github.com/mackron/dr_libs
