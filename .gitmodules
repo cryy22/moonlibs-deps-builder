@@ -1,3 +1,12 @@
 [submodule "cimgui"]
 	path = cimgui
 	url = https://github.com/cimgui/cimgui
+[submodule "bc7enc"]
+	path = bc7enc
+	url = https://github.com/richgel999/bc7enc
+[submodule "bc7enc_rdo"]
+	path = bc7enc_rdo
+	url = https://github.com/richgel999/bc7enc_rdo
+[submodule "Refresh"]
+	path = Refresh
+	url = git@github.com:MoonsideGames/Refresh
