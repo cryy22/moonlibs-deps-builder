@@ -74,6 +74,17 @@ function build_msdf-atlas-gen() {
     rm -rf "${rootdir}/msdf-atlas-gen/build"
 }
 
+function build_qoaconv() {
+    echo "building qoaconv..."
+
+    cd "${rootdir}/qoa"
+    gcc qoaconv.c -std=gnu99 -lm -O3 -o qoaconv
+
+    cd $startdir
+    mv "${rootdir}/qoa/qoaconv" "${outputdir}"
+    rm -rf "${rootdir}/qoa/qoaconv"
+}
+
 case "${sourcedir}" in
     "cimgui")
         build_cimgui
@@ -87,11 +98,15 @@ case "${sourcedir}" in
     "msdf-atlas-gen")
         build_msdf-atlas-gen
         ;;
+    "qoaconv")
+        build_qoaconv
+        ;;
     "all")
         build_cimgui
         build_bc7enc
         build_refreshc
         build_msdf-atlas-gen
+        build_qoaconv
         ;;
     *)
         echo "unknown sourcedir ${sourcedir}"

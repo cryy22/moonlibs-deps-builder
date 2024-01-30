@@ -13,3 +13,6 @@
 [submodule "msdf-atlas-gen"]
 	path = msdf-atlas-gen
 	url = https://github.com/Chlumsky/msdf-atlas-gen
+[submodule "qoa"]
+	path = qoa
+	url = https://github.com/phoboslab/qoa
