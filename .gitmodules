@@ -19,3 +19,6 @@
 [submodule "Cram"]
 	path = Cram
 	url = git@github.com:MoonsideGames/Cram
+[submodule "SDL"]
+	path = SDL
+	url = git@github.com:libsdl-org/SDL

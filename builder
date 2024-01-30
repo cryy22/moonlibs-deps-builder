@@ -2,7 +2,11 @@
 
 sourcedir=$1
 startdir=`pwd`
-rootdir=`dirname "${file}"`
+
+cd `dirname "${file}"`
+rootdir=`pwd`
+cd startdir
+
 outputdir="${rootdir}/output/"
 
 if [[ -z "${sourcedir}" ]]; then
@@ -101,6 +105,38 @@ function build_cramcli() {
     rm -rf "${rootdir}/Cram/build"
 }
 
+function build_libsdl() {
+    echo "building libsdl..."
+
+    cd "${rootdir}/SDL"
+    rm -rf build
+    mkdir build
+    cd build
+
+    CMAKE_OSX_ARCHITECTURES="arm64" cmake ..
+    make
+
+    cd $startdir
+    mv "${rootdir}/SDL/build/libsdl2-2.0.0.dylib" "${outputdir}"
+    rm -rf "${rootdir}/SDL/build"
+}
+
+function build_librefresh() {
+    echo "building librefresh..."
+
+    cd "${rootdir}/Refresh"
+    rm -rf build
+    mkdir build
+    cd build
+
+    CMAKE_OSX_ARCHITECTURES="arm64" cmake .. -DSDL2_INCLUDE_DIRS="${rootdir}/SDL/include/" -DSDL2_LIBRARIES="${rootdir}/output/libsdl2-2.0.0.dylib"
+    make
+
+    cd $startdir
+    cp -L "${rootdir}/Refresh/build/libRefresh.1.dylib" "${outputdir}"
+    rm -rf "${rootdir}/Refresh/build"
+}
+
 case "${sourcedir}" in
     "cimgui")
         build_cimgui
@@ -120,12 +156,21 @@ case "${sourcedir}" in
     "cramcli")
         build_cramcli
         ;;
+    "libsdl")
+        build_libsdl
+        ;;
+    "librefresh")
+        build_librefresh
+        ;;
     "all")
         build_cimgui
         build_bc7enc
         build_refreshc
         build_msdf-atlas-gen
         build_qoaconv
+        build_cramcli
+        build_libsdl
+        build_librefresh
         ;;
     *)
         echo "unknown sourcedir ${sourcedir}"
