@@ -18,7 +18,7 @@ function build_cimgui() {
     mkdir build
     cd build
 
-    CMAKE_OSX_ARCHITECTURES="x86_64;arm64" cmake ..
+    CMAKE_OSX_ARCHITECTURES="arm64" cmake ..
     make
 
     cd $startdir
@@ -34,7 +34,7 @@ function build_bc7enc() {
     mkdir build
     cd build
 
-    CMAKE_OSX_ARCHITECTURES="x86_64;arm64" CXX=g++-13 CC=gcc-13 cmake ..
+    CMAKE_OSX_ARCHITECTURES="arm64" CXX=g++-13 CC=gcc-13 cmake ..
     make
 
     cd $startdir
@@ -58,6 +58,22 @@ function build_refreshc() {
     cd $startdir
 }
 
+function build_msdf-atlas-gen() {
+    echo "building msdf-atlas-gen..."
+
+    cd "${rootdir}/msdf-atlas-gen"
+    rm -rf build
+    mkdir build
+    cd build
+
+    CMAKE_OSX_ARCHITECTURES="arm64" VCPKG_ROOT="${HOME}/dev/github.com/Microsoft/vcpkg/" cmake ..
+    make
+
+    cd $startdir
+    mv "${rootdir}/msdf-atlas-gen/build/bin/msdf-atlas-gen" "${outputdir}"
+    rm -rf "${rootdir}/msdf-atlas-gen/build"
+}
+
 case "${sourcedir}" in
     "cimgui")
         build_cimgui
@@ -68,10 +84,14 @@ case "${sourcedir}" in
     "refreshc")
         build_refreshc
         ;;
+    "msdf-atlas-gen")
+        build_msdf-atlas-gen
+        ;;
     "all")
         build_cimgui
         build_bc7enc
         build_refreshc
+        build_msdf-atlas-gen
         ;;
     *)
         echo "unknown sourcedir ${sourcedir}"

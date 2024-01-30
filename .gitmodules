@@ -10,3 +10,6 @@
 [submodule "Refresh"]
 	path = Refresh
 	url = git@github.com:MoonsideGames/Refresh
+[submodule "msdf-atlas-gen"]
+	path = msdf-atlas-gen
+	url = https://github.com/Chlumsky/msdf-atlas-gen
