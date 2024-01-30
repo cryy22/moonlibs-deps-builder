@@ -16,3 +16,6 @@
 [submodule "qoa"]
 	path = qoa
 	url = https://github.com/phoboslab/qoa
+[submodule "Cram"]
+	path = Cram
+	url = git@github.com:MoonsideGames/Cram

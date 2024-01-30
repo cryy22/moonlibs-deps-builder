@@ -23,7 +23,7 @@ function build_cimgui() {
 
     cd $startdir
     mv "${rootdir}/cimgui/build/cimgui.dylib" "${outputdir}"
-    rm "${rootdir}/cimgui/build"
+    rm -rf "${rootdir}/cimgui/build"
 }
 
 function build_bc7enc() {
@@ -85,6 +85,22 @@ function build_qoaconv() {
     rm -rf "${rootdir}/qoa/qoaconv"
 }
 
+function build_cramcli() {
+    echo "building cramcli..."
+
+    cd "${rootdir}/Cram"
+    rm -rf build
+    mkdir build
+    cd build
+
+    CMAKE_OSX_ARCHITECTURES="arm64" cmake ..
+    make
+
+    cd $startdir
+    mv "${rootdir}/Cram/build/cramcli" "${outputdir}"
+    rm -rf "${rootdir}/Cram/build"
+}
+
 case "${sourcedir}" in
     "cimgui")
         build_cimgui
@@ -100,6 +116,9 @@ case "${sourcedir}" in
         ;;
     "qoaconv")
         build_qoaconv
+        ;;
+    "cramcli")
+        build_cramcli
         ;;
     "all")
         build_cimgui
