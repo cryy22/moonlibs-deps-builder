@@ -137,6 +137,22 @@ function build_librefresh() {
     rm -rf "${rootdir}/Refresh/build"
 }
 
+function build_libwellspring() {
+    echo "building libwellspring..."
+
+    cd "${rootdir}/Wellspring"
+    rm -rf build
+    mkdir build
+    cd build
+
+    CMAKE_OSX_ARCHITECTURES="arm64" cmake .. -DSDL2_INCLUDE_DIRS="${rootdir}/SDL/include/" -DSDL2_LIBRARIES="${rootdir}/output/libsdl2-2.0.0.dylib"
+    make
+
+    cd $startdir
+    cp -L "${rootdir}/Wellspring/build/libWellspring.1.dylib" "${outputdir}"
+    rm -rf "${rootdir}/Wellspring/build"
+}
+
 function build_libfaudio() {
     echo "building libfaudio..."
 
@@ -178,6 +194,9 @@ case "${sourcedir}" in
     "librefresh")
         build_librefresh
         ;;
+    "libwellspring")
+        build_libwellspring
+        ;;
     "libfaudio")
         build_libfaudio
         ;;
@@ -190,6 +209,7 @@ case "${sourcedir}" in
         build_cramcli
         build_libsdl
         build_librefresh
+        build_libwellspring
         build_libfaudio
         ;;
     *)
